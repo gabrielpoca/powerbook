@@ -19,7 +19,7 @@ it will match The Space Gray theme for ST2 (pre-isntalled for you)
 run the script:
 
 ```bash
-$ bash -c "$(curl -fsSL raw.github.com/rauluranga/powerbook/master/bin/install)"
+bash -c "$(curl -fsSL raw.github.com/gabrielpoca/powerbook/master/bin/install)"
 ```
 
 ###Features
