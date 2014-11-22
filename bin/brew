@@ -16,9 +16,12 @@ run_brew() {
 
 	brew install git-flow
 	brew install gh
+  brew install rcm
 	brew install the_silver_searcher
 	brew install tmux
 	brew install tree
+  brew install weechat
+  brew install macvim --override-system-vim
 
 	# Remove outdated versions from the cellar
 	brew cleanup

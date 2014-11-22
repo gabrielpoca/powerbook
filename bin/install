@@ -52,7 +52,6 @@ source ./bin/brew
 source ./bin/cask
 source ./bin/font
 source ./bin/quicklook
-source ./lib/git
 source ./lib/ruby
 source ./lib/utils
 
@@ -95,15 +94,15 @@ if [ ! -d "${HOME}/.oh-my-zsh" ]; then
     curl -L http://install.ohmyz.sh | sh
 
     #setup rbenv
-    if ! grep -qs "rbenv init" ~/.zshrc; then
-        printf 'export PATH="$HOME/.rbenv/bin:$PATH"\n' >> ~/.zshrc
-        printf 'eval "$(rbenv init - --no-rehash)"\n' >> ~/.zshrc
+    #if ! grep -qs "rbenv init" ~/.zshrc; then
+        #printf 'export PATH="$HOME/.rbenv/bin:$PATH"\n' >> ~/.zshrc
+        #printf 'eval "$(rbenv init - --no-rehash)"\n' >> ~/.zshrc
 
-        e_process "Enable shims and autocompletion ..."
-        eval "$(rbenv init - --no-rehash)"
-    fi
+        #e_process "Enable shims and autocompletion ..."
+        #eval "$(rbenv init - --no-rehash)"
+    #fi
 
-    export PATH="$HOME/.rbenv/bin:$PATH"
+    #export PATH="$HOME/.rbenv/bin:$PATH"
 fi
 
 #     ____        __         
@@ -114,10 +113,10 @@ fi
 #                   /____/   
 
 
-e_process "Installing ruby & gem files"
 
-# Check for rbenv
+# Check for rvm
 if ! type_exists 'rvm'; then
+    e_process "Installing ruby & gems"
     curl -sSL https://get.rvm.io | bash
 
     # Install Ruby
@@ -134,21 +133,18 @@ e_success "All packages have been installed"
                                     
 
 # Ask before potentially overwriting files
-#seek_confirmation "This step may overwrite your existing dotfiles"
+seek_confirmation "This step may overwrite your existing dotfiles"
 
-#if is_confirmed; then
-    ## Symlink all necessary files
-    #homesick clone ${GITHUB_USER}/dotfiles
-    #homesick symlink dotfiles
+if is_confirmed; then
+    git clone "git@github.com:${GITHUB_USER}/dotfiles.git" "${HOME}/.dotfiles"
 
-    #e_success "All files have been symlinked"
+    rcup -d "${HOME}/.dotfiles" -x README.md
 
-    ## Setup git authorship
-    #setup_git_author
-
-#else
-    #e_error "This step is required.  When you're ready, run this script to start up again"
-#fi
+    # install tmux package manager
+    git clone "https://github.com/tmux-plugins/tpm" "${HOME}/.tmux/plugins/tpm"
+else
+    e_error "This step is required.  When you're ready, run this script to start up again"
+fi
 
 #    ____  _____    _  __    ___                    
 #   / __ \/ ___/   | |/ /   /   |  ____  ____  _____
@@ -158,23 +154,23 @@ e_success "All packages have been installed"
 #                              /_/   /_/            
 
 # Ask installing OS X Applications?
-#seek_confirmation "Do you want to install Mac OS X Applications?"
+seek_confirmation "Do you want to install Mac OS X Applications?"
 
-#if is_confirmed; then
+if is_confirmed; then
 
-    #e_process "Installing Mac OS X Applications"
-    #run_apps
+    e_process "Installing Mac OS X Applications"
+    run_apps
     
-    #e_process "Installing Mac OS X fonts"
-    #run_fonts
+    e_process "Installing Mac OS X fonts"
+    run_fonts
 
-    #e_process "Installing Mac OS X Quick Look plugins for developers"
-    #run_ql
+    e_process "Installing Mac OS X Quick Look plugins for developers"
+    run_ql
 
-    #e_success "All Mac OS X Applications have been installed"
+    e_success "All Mac OS X Applications have been installed"
 
-    #e_warning "Please consider using cask commands for Updating/Upgrading or Uninstalling a Mac OS X Application"
-#fi
+    e_warning "Please consider using cask commands for Updating/Upgrading or Uninstalling a Mac OS X Application"
+fi
 
 #figlet -k 'Enjoy!' | cowsay -f moose -n | toilet --gay -f term   
 
